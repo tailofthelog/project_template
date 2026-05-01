@@ -1,0 +1,19 @@
+services:
+  claude:
+    build: .
+    stdin_open: true
+    tty: true
+    working_dir: /home/cc_sandbox/project
+    mem_limit: 4g
+    pids_limit: 512
+    cpus: 2.0
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    init: true
+    volumes:
+      - ${HOME}/.claude:/home/cc_sandbox/.claude
+      - ${HOME}/.claude.json:/home/cc_sandbox/.claude.json
+      - ../:/home/cc_sandbox/project
+    command: claude
