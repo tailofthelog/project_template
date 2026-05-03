@@ -1,2 +1,38 @@
 .claude/settings.local.json
 .DS_Store
+
+# Secrets / credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+secrets/
+.secrets/
+credentials.json
+service-account*.json
+
+# Language ecosystems
+node_modules/
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.mypy_cache/
+.pytest_cache/
+.ruff_cache/
+dist/
+build/
+*.egg-info/
+
+# Editor / OS
+.idea/
+.vscode/
+*.swp
+Thumbs.db
