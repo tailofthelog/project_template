@@ -22,6 +22,18 @@ rm -rf .git
 
 # Fresh repo.
 git init -q -b main
+
+# Secrets scanning via pre-commit (gitleaks).
+if ! command -v pre-commit >/dev/null 2>&1; then
+  if command -v brew >/dev/null 2>&1; then
+    brew install pre-commit
+  else
+    echo "error: Homebrew not found; install pre-commit manually" >&2
+    exit 1
+  fi
+fi
+pre-commit install
+
 git add -A
 git commit -q -m "Initial commit from project_template"
 
