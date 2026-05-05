@@ -35,14 +35,23 @@ fi
 visibility="$(gh repo view --json visibility -q .visibility)"
 echo "Configuring $repo ($visibility)..."
 
+# Secret scanning, push protection, and branch protection are free for public
+# repos; on private repos they require GitHub Advanced Security. If GHAS isn't
+# enabled, skip everything and self-destruct — re-running later is unlikely.
+if [ "$visibility" != "PUBLIC" ]; then
+  ghas_status="$(gh api "repos/$repo" -q '.security_and_analysis.advanced_security.status' 2>/dev/null || true)"
+  if [ "$ghas_status" != "enabled" ]; then
+    echo "Skipping: $repo is $visibility and GitHub Advanced Security is not enabled." >&2
+    rm -- "$0"
+    exit 0
+  fi
+fi
+
 # Secret scanning + push protection.
-# Free for public repos; private repos require GitHub Advanced Security.
-if ! gh api -X PATCH "repos/$repo" \
+gh api -X PATCH "repos/$repo" \
   -F security_and_analysis[secret_scanning][status]=enabled \
   -F security_and_analysis[secret_scanning_push_protection][status]=enabled \
-  >/dev/null 2>&1; then
-  echo "warn: could not enable secret scanning (likely a private repo without GHAS). Skipping." >&2
-fi
+  >/dev/null
 
 # Branch protection on main: require the secrets-scan workflow's gitleaks job to pass.
 gh api -X PUT "repos/$repo/branches/main/protection" \
