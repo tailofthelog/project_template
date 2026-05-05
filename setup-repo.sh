@@ -17,7 +17,21 @@ if ! command -v gh >/dev/null 2>&1; then
   exit 1
 fi
 
-repo="$(gh repo view --json nameWithOwner -q .nameWithOwner)"
+if ! repo="$(gh repo view --json nameWithOwner -q .nameWithOwner 2>/dev/null)"; then
+  cat >&2 <<'EOF'
+error: no GitHub remote found for this repo.
+
+Create one and push, then re-run this script. For example:
+
+  # Create a new GitHub repo from the current directory and push main:
+  gh repo create <name> --private --source=. --remote=origin --push
+
+  # Or, if the repo already exists on GitHub:
+  git remote add origin git@github.com:<owner>/<name>.git
+  git push -u origin main
+EOF
+  exit 1
+fi
 visibility="$(gh repo view --json visibility -q .visibility)"
 echo "Configuring $repo ($visibility)..."
 
