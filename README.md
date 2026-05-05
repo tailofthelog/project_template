@@ -7,6 +7,7 @@ Starter scaffold for new projects that will be developed with Claude Code runnin
 - `cc_docker/` — Dockerfile + compose file for running Claude Code in an isolated container with the project mounted. See [`cc_docker/README.md`](cc_docker/README.md).
 - `CLAUDE.md` — project-specific instructions auto-loaded by Claude Code. Edit this for each new project.
 - `bootstrap.sh` — run once after copying the template; severs template git history, starts a fresh repo, then deletes itself.
+- `cc` — launcher that runs Claude Code in the Docker sandbox.
 
 ## Starting a new project
 
@@ -20,7 +21,7 @@ cd my-new-project
 Then launch Claude in the sandbox:
 
 ```bash
-docker compose -f cc_docker/docker-compose.yml run --rm claude
+./cc
 ```
 
 ## Updating the template itself
