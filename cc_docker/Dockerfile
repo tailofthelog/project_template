@@ -14,8 +14,12 @@ RUN curl -sSfL "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEA
 | tar -xz -C /usr/local/bin gitleaks \
 && gitleaks version
 
-# Install Claude Code CLI globally
-RUN npm install -g @anthropic-ai/claude-code@2.1.126
+# Install Claude Code CLI globally, plus ccusage for the statusline.
+RUN npm install -g @anthropic-ai/claude-code@2.1.126 ccusage
+
+# Pinned version is intentional; the non-root sandbox user can't write to
+# the global node_modules anyway, so auto-update would just emit warnings.
+ENV DISABLE_AUTOUPDATER=1
 
 # Create a non-root user
 RUN useradd -m -s /bin/bash cc_sandbox
