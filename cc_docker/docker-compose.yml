@@ -15,5 +15,6 @@ services:
     volumes:
       - ${HOME}/.claude:/home/cc_sandbox/.claude
       - ${HOME}/.claude.json:/home/cc_sandbox/.claude.json
+      - ${HOME}/code/dotfiles/.claude:${HOME}/code/dotfiles/.claude
       - ../:/home/cc_sandbox/project
     command: claude
